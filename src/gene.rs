@@ -34,8 +34,32 @@ pub const ALLOWED_TOKENS:[u32;31]=
 	258,		// begin layer
 ];
 /// at each position in the gene, possibly apply the three types of point mutations according to their respective probabilities
-pub fn mutate(mut gene:Vec<u32>,deletionchance:f32,insertionchance:f32,substitutionchance:f32)->Vec<u32>{
-	todo!()
+pub fn mutate(mut gene:Vec<u32>,
+			  deletionChance:f32,
+			  insertionChance:f32,
+			  substitutionChance:f32
+			 ) ->Vec<u32>{
+	let mut rng = rand::rng();
+	let x: f32 = rng.random::();
+	use std::mem;
+
+	while y < gene {
+		if x < deletionChance {
+			gene.remove(y);
+			return gene;
+		}
+		else if x > insertionChance {
+			gene.insert(rng::random())
+			return gene;
+		}
+		else if x <= substitutionChance {
+			gene(y, mem::replace(rng.random()))
+			return gene;
+		}
+	return gene;
+			
+	}
+		
 }
 /// returns true with probability chance
 pub fn should_mutate(chance:f32)->bool{
