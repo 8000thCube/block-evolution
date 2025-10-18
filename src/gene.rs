@@ -33,8 +33,16 @@ pub const ALLOWED_TOKENS:[u32;31]=
 	257,		// begin node
 	258,		// begin layer
 ];
+/// builds a model from the gene
+pub fn build_model(gene:&[u32])->Graph<Layer<NdArray>>{
+	todo!()
+}
 /// at each position in the gene, possibly apply the three types of point mutations according to their respective probabilities
 pub fn mutate(mut gene:Vec<u32>,deletionchance:f32,insertionchance:f32,substitutionchance:f32)->Vec<u32>{
+	todo!()
+}
+/// generates a gene that produces the model structure
+pub fn transcribe_gene(model:&Graph<Layer<NdArray>>)->Vec<u32>{
 	todo!()
 }
 /// returns true with probability chance
@@ -42,4 +50,5 @@ pub fn should_mutate(chance:f32)->bool{
 	let choice:f32=rand::random();
 	choice<chance
 }
-
+use block_graph::{Graph,burn::Layer};
+use burn::backend::NdArray;

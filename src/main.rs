@@ -8,6 +8,7 @@ fn main(){
 
 	//data::save_model(&model,"m0").unwrap();	// block graph TODO s: implement (de)serialize for Graph, add flatten and reshape layers
 }
+pub mod evolution;
 /// load, save, and other data related utilities
 pub mod data;
 pub mod gene;
