@@ -38,8 +38,39 @@ pub fn build_model(gene:&[u32])->Graph<Layer<NdArray>>{
 	todo!()
 }
 /// at each position in the gene, possibly apply the three types of point mutations according to their respective probabilities
-pub fn mutate(mut gene:Vec<u32>,deletionchance:f32,insertionchance:f32,substitutionchance:f32)->Vec<u32>{
-	todo!()
+pub fn mutate(mut gene:Vec<u32>,
+              deletionChance:f32,
+              insertionChance:f32,
+              substitutionChance:f32
+             ) ->Vec<u32>{
+    let mut rng = rand::rng();
+    use std::mem;
+    use rand::seq::SliceRandom;
+    let mut y = 0;
+
+    while y < gene.len() {
+        let mut x: f32 = rng.random();
+        if x < deletionChance {
+            gene.remove(y);
+            
+        }
+
+        x = rng.random();
+        if x > insertionChance {
+            let token = ALLOWED_TOKENS.choose(&mut rng).unwrap();
+            gene.insert(y, token);
+            y = y + 1;
+        }
+
+        x = rng.random();
+        if x <= substitutionChance {
+            gene[y] = ALLOWED_TOKENS.choose(&mut rng).unwrap();
+            y = y + 1;
+        }
+        
+    }
+
+    gene
 }
 /// generates a gene that produces the model structure
 pub fn transcribe_gene(model:&Graph<Layer<NdArray>>)->Vec<u32>{
