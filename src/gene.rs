@@ -37,7 +37,16 @@ pub const ALLOWED_TOKENS:[u32;31]=
 pub fn build_model(gene:&[u32])->Graph<Layer<NdArray>>{
 	todo!()
 }
-/// at each position in the gene, possibly apply the three types of point mutations according to their respective probabilities
+
+pub fn mutation_test(){
+	let mut gene:Vec<u32>=vec!['H','E','L','L','O',' ','W','O','R','L','D',';'].into_iter().map(|x|x as u32).collect();
+	for _ in 0..10{
+		for c in gene.iter().map(|&c|char::from_u32(c).unwrap()){print!("{c}")}
+		gene=mutate(gene,0.05,0.05,0.1);
+		println!();
+	}
+}
+/// at each position in the gene, possibly apply the three types of point mutations according to their respective probabilities	// TODO although this function will have a relatively low impact on performance compared to training, it could be optimized
 pub fn mutate(mut gene:Vec<u32>,
               deletionChance:f32,
               insertionChance:f32,
@@ -45,29 +54,30 @@ pub fn mutate(mut gene:Vec<u32>,
              ) ->Vec<u32>{
     let mut rng = rand::rng();
     use std::mem;
-    use rand::seq::SliceRandom;
+	use rand::Rng;
+    use rand::seq::IndexedRandom;
     let mut y = 0;
 
     while y < gene.len() {
         let mut x: f32 = rng.random();
         if x < deletionChance {
             gene.remove(y);
-            
+
         }
 
         x = rng.random();
-        if x > insertionChance {
-            let token = ALLOWED_TOKENS.choose(&mut rng).unwrap();
+        if x < insertionChance {
+            let token = *ALLOWED_TOKENS.choose(&mut rng).unwrap();
             gene.insert(y, token);
             y = y + 1;
         }
 
         x = rng.random();
-        if x <= substitutionChance {
-            gene[y] = ALLOWED_TOKENS.choose(&mut rng).unwrap();
-            y = y + 1;
+        if x < substitutionChance &&y<gene.len(){
+            gene[y] = *ALLOWED_TOKENS.choose(&mut rng).unwrap();
         }
-        
+
+		y = y + 1;
     }
 
     gene
