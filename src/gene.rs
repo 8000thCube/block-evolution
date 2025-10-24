@@ -48,32 +48,31 @@ pub fn mutation_test(){
 }
 /// at each position in the gene, possibly apply the three types of point mutations according to their respective probabilities	// TODO although this function will have a relatively low impact on performance compared to training, it could be optimized
 pub fn mutate(mut gene:Vec<u32>,
-              deletionChance:f32,
-              insertionChance:f32,
-              substitutionChance:f32
+              deletionchance:f32,
+              insertionchance:f32,
+              substitutionchance:f32
              ) ->Vec<u32>{
     let mut rng = rand::rng();
-    use std::mem;
 	use rand::Rng;
     use rand::seq::IndexedRandom;
     let mut y = 0;
 
     while y < gene.len() {
         let mut x: f32 = rng.random();
-        if x < deletionChance {
+        if x < deletionchance {
             gene.remove(y);
 
         }
 
         x = rng.random();
-        if x < insertionChance {
+        if x < insertionchance {
             let token = *ALLOWED_TOKENS.choose(&mut rng).unwrap();
             gene.insert(y, token);
             y = y + 1;
         }
 
         x = rng.random();
-        if x < substitutionChance &&y<gene.len(){
+        if x < substitutionchance &&y<gene.len(){
             gene[y] = *ALLOWED_TOKENS.choose(&mut rng).unwrap();
         }
 
