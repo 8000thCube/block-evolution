@@ -1,5 +1,5 @@
 // allowed tokens in the "gene" sequence. This list is not final; we might add specific tokens for layer types
-pub const ALLOWED_TOKENS:[u32;31]=
+pub const ALLOWED_TOKENS:[u32;32]=
 [
 	'A' as u32,// letters
 	'B' as u32,
@@ -30,14 +30,19 @@ pub const ALLOWED_TOKENS:[u32;31]=
 	' ' as u32,	// space for separator
 	';' as u32,	// semicolon for stop codon
 	256,		// begin connection
-	257,		// begin node
-	258,		// begin layer
+	257,		// begin layer
+	258,		// begin node
+	259,		// begin order
 ];
 /// builds a model from the gene
-pub fn build_model(gene:&[u32])->Graph<Layer<NdArray>>{
-	todo!()
+pub fn build_model(_gene:&[u32])->Graph<Layer<NdArray>>{
+	// TODO
+	Default::default()
 }
-
+//  generates a dictionary of tokens used to convert between token array and human readable string formats
+pub fn generate_token_dict()->TokenDict{
+	["\nconnection: ","\nlayer","\nnode:","\norder:","\n"].into_iter().collect()
+}
 pub fn mutation_test(){
 	let mut gene:Vec<u32>=vec!['H','E','L','L','O',' ','W','O','R','L','D',';'].into_iter().map(|x|x as u32).collect();
 	for _ in 0..10{
@@ -82,8 +87,8 @@ pub fn mutate(mut gene:Vec<u32>,
     gene
 }
 /// generates a gene that produces the model structure
-pub fn transcribe_gene(model:&Graph<Layer<NdArray>>)->Vec<u32>{
-	todo!()
+pub fn transcribe_gene(_model:&Graph<Layer<NdArray>>)->Vec<u32>{
+	TokenDict::default().string_to_tokens("TEST")
 }
 /// returns true with probability chance
 pub fn should_mutate(chance:f32)->bool{
@@ -92,3 +97,4 @@ pub fn should_mutate(chance:f32)->bool{
 }
 use block_graph::{Graph,burn::Layer};
 use burn::backend::NdArray;
+use token_dict::TokenDict;

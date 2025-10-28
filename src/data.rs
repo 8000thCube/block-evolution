@@ -7,7 +7,7 @@ pub fn load_model<P:Into<PathBuf>,T:DeserializeOwned>(path:P)->IOResult<T>{
 pub fn save_model<P:Into<PathBuf>,T:Serialize>(model:&T,path:P)->IOResult<()>{
 	let path=path.into();
 
-	let mut writer=BufWriter::new(File::open(&path)?);
+	let mut writer=BufWriter::new(File::create(&path)?);
 	Ok(encode::write(&mut writer,model).unwrap())
 }
 use rmp_serde::{decode,encode};

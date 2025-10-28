@@ -39,7 +39,7 @@ pub fn test_model(graph:&Graph<Layer<NdArray>>){
 	for n in 0..100{
 		let (testinput,testtarget)=testdata.get(n).unwrap();
 		let expectedoutput=testtarget.into_float_vec()[0] as u32;
-		let testoutput:u32=graph.forward(testinput.reshape([28,28]));
+		let testoutput:u32=graph.forward(testinput.reshape([28_isize,28]));
 
 		if expectedoutput==testoutput{k+=1}
 		println!("expected {expectedoutput}, output {testoutput}");
@@ -66,7 +66,7 @@ impl<B:Backend> Dataset < (Value<B>, Value<B>) > for MNIST { // (image, label)
 		let input = Value::from(image);
 		let target = Value::from(label);
 
-		let input = input.reshape([1,28,28]);
+		let input = input.reshape([1_usize,28,28]);
 
 		Some((input, target))
 	}
