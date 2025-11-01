@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+b-k-tree = "0.5.0"
 block-graph = "0.3"
 burn = { version = "0.18", features = ["fusion","ndarray","train","vision","wgpu"]}
 rand = "0.9"
