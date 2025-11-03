@@ -95,6 +95,36 @@ pub fn should_mutate(chance:f32)->bool{
 	let choice:f32=rand::random();
 	choice<chance
 }
+
+/// generate a gene from a graph given a hashmap of 
+pub fn gene_from_graph<C: AI<V,V> + Op<Output = V>,V: Clone + Default + Merge>(graph: &Graph<C>, map: Option<HashMap::<u32,Label>>)
+->(Vec<u32>,Option<HashMap::<u32,Label>>){
+	let mut gene: Vec<u32> = Vec::new();
+	let map = match map{ // check if hashmap was input or not 
+		Some(HashMap::<u32,Label>) => map,
+		None => Some({ // TODO: generate new hashmap that can be returned
+			HashMap::<u32,Label>::new()
+		})
+	}.unwrap();
+	for connection in graph.connections(){
+		
+	}
+	(gene,Some(map))
+}
+
+pub fn init_random_gene(length:usize)->Vec<u32>{
+	let mut gene:Vec<u32>=Vec::with_capacity(length);
+	for _ in 0..length{ // not inclusive of length*
+		gene.push(ALLOWED_TOKENS[rand::rng().random_range(0..ALLOWED_TOKENS.len()-1)]); 
+	}
+	gene
+}
+
+use {
+	block_graph::{Graph,Label,Op,AI,Merge},
+	std::{default::Default,collections::HashMap},
+	rand::Rng
+};
 use block_graph::{Graph,burn::Layer};
 use burn::backend::NdArray;
 use token_dict::TokenDict;
