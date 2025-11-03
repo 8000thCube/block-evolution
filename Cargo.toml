@@ -4,8 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-block-graph = {version = "0.2"}
+b-k-tree = "0.5.0"
+block-graph = "0.3"
 burn = { version = "0.18", features = ["fusion","ndarray","train","vision","wgpu"]}
 rand = "0.9"
 rmp-serde = "1.3.0"
 serde = { version = "1", features = ["derive"] }
+token-dict = "0.3"

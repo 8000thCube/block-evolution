@@ -1,5 +1,5 @@
 // allowed tokens in the "gene" sequence. This list is not final; we might add specific tokens for layer types
-pub const ALLOWED_TOKENS:[u32;31]=
+pub const ALLOWED_TOKENS:[u32;32]=
 [
 	'A' as u32,// letters
 	'B' as u32,
@@ -30,12 +30,65 @@ pub const ALLOWED_TOKENS:[u32;31]=
 	' ' as u32,	// space for separator
 	';' as u32,	// semicolon for stop codon
 	256,		// begin connection
-	257,		// begin node
-	258,		// begin layer
+	257,		// begin layer
+	258,		// begin node
+	259,		// begin order
 ];
-/// at each position in the gene, possibly apply the three types of point mutations according to their respective probabilities
-pub fn mutate(mut gene:Vec<u32>,deletionchance:f32,insertionchance:f32,substitutionchance:f32)->Vec<u32>{
-	todo!()
+/// builds a model from the gene
+pub fn build_model(_gene:&[u32])->Graph<Layer<NdArray>>{
+	// TODO
+	Default::default()
+}
+//  generates a dictionary of tokens used to convert between token array and human readable string formats
+pub fn generate_token_dict()->TokenDict{
+	["\nconnection: ","\nlayer","\nnode:","\norder:","\n"].into_iter().collect()
+}
+pub fn mutation_test(){
+	let mut gene:Vec<u32>=vec!['H','E','L','L','O',' ','W','O','R','L','D',';'].into_iter().map(|x|x as u32).collect();
+	for _ in 0..10{
+		for c in gene.iter().map(|&c|char::from_u32(c).unwrap()){print!("{c}")}
+		gene=mutate(gene,0.05,0.05,0.1);
+		println!();
+	}
+}
+/// at each position in the gene, possibly apply the three types of point mutations according to their respective probabilities	// TODO although this function will have a relatively low impact on performance compared to training, it could be optimized
+pub fn mutate(mut gene:Vec<u32>,
+              deletionchance:f32,
+              insertionchance:f32,
+              substitutionchance:f32
+             ) ->Vec<u32>{
+    let mut rng = rand::rng();
+	use rand::Rng;
+    use rand::seq::IndexedRandom;
+    let mut y = 0;
+
+    while y < gene.len() {
+        let mut x: f32 = rng.random();
+        if x < deletionchance {
+            gene.remove(y);
+
+        }
+
+        x = rng.random();
+        if x < insertionchance {
+            let token = *ALLOWED_TOKENS.choose(&mut rng).unwrap();
+            gene.insert(y, token);
+            y = y + 1;
+        }
+
+        x = rng.random();
+        if x < substitutionchance &&y<gene.len(){
+            gene[y] = *ALLOWED_TOKENS.choose(&mut rng).unwrap();
+        }
+
+		y = y + 1;
+    }
+
+    gene
+}
+/// generates a gene that produces the model structure
+pub fn transcribe_gene(_model:&Graph<Layer<NdArray>>)->Vec<u32>{
+	TokenDict::default().string_to_tokens("TEST")
 }
 /// returns true with probability chance
 pub fn should_mutate(chance:f32)->bool{
@@ -72,3 +125,6 @@ use {
 	std::{default::Default,collections::HashMap},
 	rand::Rng
 };
+use block_graph::{Graph,burn::Layer};
+use burn::backend::NdArray;
+use token_dict::TokenDict;
