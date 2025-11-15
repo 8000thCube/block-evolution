@@ -33,3 +33,27 @@ pub mod gene;
 pub mod mnist;
 use evolution::Population;
 use std::{env,time::Duration};
+
+pub fn MNIST_evaluation_subprocess(input_file: &str, output_file: &str){
+	use serde::{Serialize};
+	use std::fs::File;
+	use std::io::{BufWriter,BufReader,Write};
+
+	let file = File::open(input_file)?;
+	let mut reader = BufReader::new(file);
+	let gene: Gene = rmp_serde::from_read(&mut reader);
+
+	let mutated = mutate(gene);
+	
+	let build = build_model(mutated.clone());
+	
+	let trained = train_model(build);
+
+	let accuracy = evaluate_model(1000, trained);
+	let loss = 100 - accuracy;
+
+	let mut output = File::create(output_file)?;
+	let mut write = BufWriter::new(output);
+
+	rmp_serde::Serializer::new(&mut write, &(mutated, trained, loss));
+}
